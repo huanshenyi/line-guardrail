@@ -1,0 +1,53 @@
+{
+  "name": "Line Guardrail (GitHub Codespaces)",
+  "dockerFile": "../../.devcontainer/Dockerfile",
+  "context": "../..",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.13"
+    },
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  },
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "line-guardrail": {
+          "permissions": {
+            "contents": "write",
+            "issues": "write",
+            "pull_requests": "write"
+          }
+        }
+      }
+    },
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.flake8",
+        "amazonwebservices.aws-toolkit-vscode",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml"
+      ]
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "remoteUser": "vscode",
+  "forwardPorts": [8000, 3000, 5000],
+  "secrets": {
+    "AWS_ACCESS_KEY_ID": {
+      "description": "AWS Access Key ID for Bedrock access"
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "description": "AWS Secret Access Key for Bedrock access"
+    },
+    "AWS_SESSION_TOKEN": {
+      "description": "AWS Session Token (if using temporary credentials)"
+    }
+  }
+}
