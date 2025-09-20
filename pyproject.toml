@@ -9,4 +9,7 @@ dependencies = [
     "boto3>=1.34.0",
     "botocore>=1.34.0",
     "aws-lambda-powertools>=2.25.0",
+    "bedrock-agentcore",
+    "bedrock-agentcore-starter-toolkit",
+    "python-dotenv",
 ]

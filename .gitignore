@@ -188,3 +188,5 @@ cython_debug/
 .uv_cache/
 # Claude Code
 .node-version
+# AgentCore
+.bedrock_agentcore.yaml
