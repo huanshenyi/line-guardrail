@@ -22,6 +22,7 @@ fail_on_empty_changeset = false
 stack_name = "line-guardrail-stack"
 s3_prefix = "line-guardrail"
 region = "us-west-2"
+resolve_s3 = true
 image_repositories = []
 
 [default.package.parameters]

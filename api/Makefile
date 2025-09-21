@@ -1,22 +1,25 @@
 # Makefile for Line Guardrail SAM project
 # Simplifies common development and deployment tasks
 
-.PHONY: help install build deploy clean test local start-api logs validate lint format
+.PHONY: help install build deploy delete delete-force status clean test local start-api logs validate lint format
 
 # Default target
 help:
 	@echo "📋 Available commands:"
-	@echo "  make install    - Install dependencies"
-	@echo "  make build      - Build SAM application"
-	@echo "  make deploy     - Deploy to AWS (reads .env automatically)"
-	@echo "  make local      - Start local development server"
-	@echo "  make start-api  - Start local API Gateway"
-	@echo "  make test       - Run tests"
-	@echo "  make logs       - Fetch CloudWatch logs"
-	@echo "  make validate   - Validate SAM template"
-	@echo "  make clean      - Clean build artifacts"
-	@echo "  make lint       - Run linting"
-	@echo "  make format     - Format code"
+	@echo "  make install      - Install dependencies"
+	@echo "  make build        - Build SAM application"
+	@echo "  make deploy       - Deploy to AWS (reads .env automatically)"
+	@echo "  make delete       - Delete SAM stack from AWS"
+	@echo "  make delete-force - Delete SAM stack without confirmation"
+	@echo "  make status       - Show stack deployment status"
+	@echo "  make local        - Start local development server"
+	@echo "  make start-api    - Start local API Gateway"
+	@echo "  make test         - Run tests"
+	@echo "  make logs         - Fetch CloudWatch logs"
+	@echo "  make validate     - Validate SAM template"
+	@echo "  make clean        - Clean build artifacts"
+	@echo "  make lint         - Run linting"
+	@echo "  make format       - Format code"
 
 # Load environment variables from .env file
 ifneq (,$(wildcard ../.env))
@@ -38,6 +41,21 @@ build:
 deploy:
 	@echo "🚀 Deploying application..."
 	./deploy.sh
+
+# Delete SAM stack
+delete:
+	@echo "🗑️  Deleting SAM stack..."
+	sam delete --stack-name line-guardrail-stack
+
+# Delete SAM stack without confirmation
+delete-force:
+	@echo "🗑️  Force deleting SAM stack..."
+	sam delete --stack-name line-guardrail-stack --no-prompts
+
+# Show stack status
+status:
+	@echo "📊 Checking stack status..."
+	@aws cloudformation describe-stacks --stack-name line-guardrail-stack --query 'Stacks[0].[StackName,StackStatus]' --output table 2>/dev/null || echo "Stack not found or not deployed"
 
 # Start local development
 local: build

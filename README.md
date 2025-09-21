@@ -40,20 +40,53 @@ agentcore configure --entrypoint agent.py --name linebot
 agentcore launch
 ```
 
-## 🚀 SAMデプロイ
+## 🚀 SAM デプロイ
 
 ### 環境変数の設定
-`.env`ファイルに以下の3つの環境変数を追加：
+
+`.env`ファイルに以下の 3 つの環境変数を追加：
+
 ```bash
 BEDROCK_AGENT_RUNTIME_ARN=your_bedrock_agent_runtime_arn
-LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
 LINE_CHANNEL_SECRET=your_line_channel_secret
+LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
 ```
 
 ### デプロイ実行
+
 ```bash
 cd api
 make deploy
+```
+
+## 🛡️ ガードレール管理
+
+### 犬ダメガードレール作成
+
+#### テスト用（DRAFT）
+```bash
+python scripts/create_dog_guardrail.py
+```
+
+#### 本番用（バージョン作成）
+```bash
+python scripts/create_dog_guardrail.py --create-version
+```
+
+### ガードレール管理
+
+#### 一覧表示
+```bash
+python scripts/manage_guardrails.py --list
+```
+
+#### 削除
+```bash
+# ID指定削除
+python scripts/manage_guardrails.py --delete GUARDRAIL_ID
+
+# 名前指定削除
+python scripts/manage_guardrails.py --delete-by-name "NekoNekoShopGuardrail"
 ```
 
 ## 📦 依存関係

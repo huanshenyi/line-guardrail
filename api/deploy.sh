@@ -59,10 +59,10 @@ sam build
 echo -e "${BLUE}☁️  Deploying to AWS...${NC}"
 if [ ! -z "$PARAMETERS" ]; then
     echo -e "${GREEN}📝 Using parameters: $PARAMETERS${NC}"
-    sam deploy --parameter-overrides $PARAMETERS
+    sam deploy --resolve-s3 --parameter-overrides $PARAMETERS
 else
     echo -e "${YELLOW}⚠️  Deploying without parameter overrides${NC}"
-    sam deploy
+    sam deploy --resolve-s3
 fi
 
 echo -e "${GREEN}✅ Deployment completed successfully!${NC}"
