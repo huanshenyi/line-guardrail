@@ -1,0 +1,37 @@
+# SAM configuration file for automated deployment
+# This file allows SAM to automatically pick up configuration settings
+
+version = 0.1
+
+[default.global.parameters]
+stack_name = "line-guardrail-stack"
+region = "us-west-2"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.deploy.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = false
+fail_on_empty_changeset = false
+stack_name = "line-guardrail-stack"
+s3_prefix = "line-guardrail"
+region = "us-west-2"
+image_repositories = []
+
+[default.package.parameters]
+resolve_s3 = true
+
+[default.sync.parameters]
+watch = true
+
+[default.local_start_api.parameters]
+warm_containers = "EAGER"
+
+[default.local_start_lambda.parameters]
+warm_containers = "EAGER"

@@ -27,11 +27,32 @@ echo "🔧 Initializing Bedrock AgentCore project..."
 
 # Create .env template if it doesn't exist
 if [ ! -f .env ]; then
-    echo "📝 Creating .env template..."
+    echo "📝 Creating .env from template..."
     cp .env.template .env 2>/dev/null || echo "# Environment variables for Line Guardrail
 AWS_REGION=us-east-1
 # Add your AWS credentials and other environment variables here
 " > .env
+    echo "⚠️  Please configure your environment variables in .env file"
+fi
+
+# Load .env variables into the shell environment for SAM CLI
+if [ -f .env ]; then
+    echo "🔧 Loading environment variables from .env..."
+    set -a
+    source .env
+    set +a
+
+    # Add .env loading to bashrc for persistent sessions
+    if ! grep -q "source.*\.env" ~/.bashrc; then
+        echo "📝 Adding .env auto-loading to ~/.bashrc..."
+        echo "" >> ~/.bashrc
+        echo "# Auto-load .env file if it exists" >> ~/.bashrc
+        echo "if [ -f \"\$PWD/.env\" ]; then" >> ~/.bashrc
+        echo "    set -a" >> ~/.bashrc
+        echo "    source \"\$PWD/.env\"" >> ~/.bashrc
+        echo "    set +a" >> ~/.bashrc
+        echo "fi" >> ~/.bashrc
+    fi
 fi
 
 # Set up pre-commit hooks if available

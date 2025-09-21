@@ -56,5 +56,10 @@
   "containerEnv": {
     "PYTHONPATH": "${containerWorkspaceFolder}",
     "AWS_DEFAULT_REGION": "us-west-2"
-  }
+  },
+  "initializeCommand": "echo 'Initializing development environment...'",
+  "postStartCommand": [
+    "bash", "-c",
+    "if [ -f .env ]; then echo 'Loading .env variables...'; set -a; source .env; set +a; fi"
+  ]
 }

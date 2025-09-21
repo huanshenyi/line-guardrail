@@ -31,8 +31,29 @@
 ### 開発コマンド
 
 ```bash
-# アプリケーションの実行
-uv run python main.py
+# ベーシックエージェントの実行
+uv run agent_basic.py
+
+# エージェントのデプロイ
+export $(cat /workspaces/line-guardrail/.env | grep -v ^# | xargs)
+agentcore configure --entrypoint agent.py --name linebot
+agentcore launch
+```
+
+## 🚀 SAMデプロイ
+
+### 環境変数の設定
+`.env`ファイルに以下の3つの環境変数を追加：
+```bash
+BEDROCK_AGENT_RUNTIME_ARN=your_bedrock_agent_runtime_arn
+LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
+LINE_CHANNEL_SECRET=your_line_channel_secret
+```
+
+### デプロイ実行
+```bash
+cd api
+make deploy
 ```
 
 ## 📦 依存関係

@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM Template for Bedrock AgentCore Lambda API
+
+Parameters:
+  BedrockAgentRuntimeArn:
+    Type: String
+    Default: "arn:aws:bedrock-agentcore:us-east-1:YOUR_ACCOUNT_ID:runtime/YOUR_RUNTIME_ID"
+    Description: ARN of the Bedrock Agent Runtime
+  LineChannelAccessToken:
+    Type: String
+    Default: "YOUR_LINE_CHANNEL_ACCESS_TOKEN"
+    Description: LINE Channel Access Token
+  LineChannelSecret:
+    Type: String
+    Default: "YOUR_LINE_CHANNEL_SECRET"
+    Description: LINE Channel Secret
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 128
+    Runtime: python3.13
+    Tracing: PassThrough
+    Environment:
+      Variables:
+        BEDROCK_AGENT_RUNTIME_ARN: !Ref BedrockAgentRuntimeArn
+        LINE_CHANNEL_ACCESS_TOKEN: !Ref LineChannelAccessToken
+        LINE_CHANNEL_SECRET: !Ref LineChannelSecret
+
+Resources:
+  BedrockAgentCoreFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: bedrock-agent-core
+      CodeUri: ./
+      Handler: lambda_handler.lambda_handler
+      Runtime: python3.13
+      Tracing: PassThrough
+      Events:
+        BedrockAgentCoreApi:
+          Type: Api
+          Properties:
+            Path: /invoke
+            Method: post
+            RestApiId: !Ref BedrockAgentCoreApi
+      Policies:
+        - arn:aws:iam::aws:policy/BedrockAgentCoreFullAccess
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: "*"
+
+  BedrockAgentCoreApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+
+Outputs:
+  BedrockAgentCoreApi:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${BedrockAgentCoreApi}.execute-api.${AWS::Region}.amazonaws.com/prod/invoke"
+  BedrockAgentCoreFunction:
+    Description: "Bedrock Agent Core Lambda Function ARN"
+    Value: !GetAtt BedrockAgentCoreFunction.Arn
+  BedrockAgentCoreFunctionIamRole:
+    Description: "Implicit IAM Role created for Bedrock Agent Core function"
+    Value: !GetAtt BedrockAgentCoreFunctionRole.Arn
