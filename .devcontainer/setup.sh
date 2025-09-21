@@ -14,9 +14,16 @@ export PATH="$HOME/.cargo/bin:$PATH"
 echo "☁️ Installing AWS SAM CLI..."
 pip3 install aws-sam-cli
 
+# Install Bedrock AgentCore Starter Toolkit
+echo "🤖 Installing Bedrock AgentCore Starter Toolkit..."
+pip3 install bedrock-agentcore-starter-toolkit
+
 # Install project dependencies
 echo "🐍 Installing Python dependencies..."
 uv sync
+
+# Initialize Bedrock AgentCore project
+echo "🔧 Initializing Bedrock AgentCore project..."
 
 # Create .env template if it doesn't exist
 if [ ! -f .env ]; then
