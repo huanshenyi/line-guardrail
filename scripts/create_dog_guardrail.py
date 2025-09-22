@@ -17,7 +17,7 @@ from botocore.exceptions import ClientError
 
 # Configuration
 BLOCKED_WORDS = ["dog", "犬"]
-BLOCKED_MESSAGE = "ここはねこねこショップだから犬の物禁止"
+BLOCKED_MESSAGE = "ここはねこねこショップなので、犬用の商品は取り扱い禁止です。"
 GUARDRAIL_NAME = "NekoNekoShopGuardrail"
 GUARDRAIL_DESCRIPTION = "Blocks dog-related content for cat shop"
 
@@ -108,7 +108,6 @@ def create_guardrail_version(guardrail_id: str) -> Dict[str, Any]:
 
         print("✅ Guardrail version created successfully!")
         print(f"📋 Version: {response['version']}")
-        print(f"📋 Status: {response['status']}")
 
         return response
 
