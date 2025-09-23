@@ -57,7 +57,14 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         body = json.loads(event['body']) if isinstance(event['body'], str) else event['body']
         
         # Check if this is a LINE webhook event
-        if 'events' in body and len(body['events']) > 0:
+        if 'events' in body:
+            # Webhookの接続確認用（空のevents配列）
+            if len(body['events']) == 0:
+                return {
+                    'statusCode': 200,
+                    'body': ''
+                }
+            # 通常のLINE webhook処理
             return handle_line_webhook(body)
         
         # Original API Gateway handling
