@@ -9,6 +9,7 @@ from linebot.v3.messaging import (
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
+    ShowLoadingAnimationRequest,
     TextMessage
 )
 
@@ -16,6 +17,24 @@ from linebot.v3.messaging import (
 LINE_CONFIGURATION = None
 if 'LINE_CHANNEL_ACCESS_TOKEN' in os.environ:
     LINE_CONFIGURATION = Configuration(access_token=os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
+
+def show_loading_animation_sdk(user_id: str, duration_seconds: int = 60) -> bool:
+    """
+    Send a loading animation to the user via LINE Messaging API
+    """
+    try:
+        if LINE_CONFIGURATION:
+            with ApiClient(LINE_CONFIGURATION) as api_client:
+                line_bot_api = MessagingApi(api_client)
+                loading_request = ShowLoadingAnimationRequest(
+                    chat_id=user_id,
+                    loadingSeconds=duration_seconds
+                )
+                line_bot_api.show_loading_animation(loading_request)
+                return True
+    except Exception as e:
+        print(f"ERROR: Failed to send loading animation: {str(e)}")
+        return False
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
@@ -85,6 +104,9 @@ def handle_line_webhook(body: Dict[str, Any]) -> Dict[str, Any]:
         if body['events'][0]['type'] == 'message':
             if body['events'][0]['message']['type'] == 'text':
                 message = body['events'][0]['message']['text']
+                user_id = body['events'][0]['source'].get('userId', 'unknown')
+                # Show loading animation
+                show_loading_animation_sdk(user_id, duration_seconds=45)
                 
                 # Call bedrock-agentcore
                 result = call_bedrock_agentcore(message)
