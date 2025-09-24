@@ -13,6 +13,7 @@ GitHub リポジトリページで "Code" > "Codespaces" > "Create codespace on 
 ```
 
 2. **AWS 認証情報の設定**
+
 ```bash
 # .env ファイルを編集
 AWS_ACCESS_KEY_ID=your_access_key
@@ -22,7 +23,7 @@ AWS_REGION=us-west-2
 AWS_SESSION_TOKEN=your_session_token
 ```
 
-## AIエージェントデプロイ
+## AI エージェントデプロイ
 
 動作確認
 
@@ -30,6 +31,7 @@ AWS_SESSION_TOKEN=your_session_token
 # ベーシックエージェントの実行
 uv run agent_basic.py
 ```
+
 エージェントデプロイ
 
 ```bash
@@ -78,6 +80,12 @@ uv run scripts/create_dog_guardrail.py --create-version
 
 ```bash
  uv run scripts/create_beauty_salon_guardrail.py
+```
+
+### コンテキストグラウンディングチェックガードレール
+
+```bash
+ uv run scripts/create_contextual_grounding_guardrail.py --create-version
 ```
 
 ### ガードレール管理
